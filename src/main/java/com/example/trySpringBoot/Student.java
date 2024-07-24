@@ -1,25 +1,43 @@
 package com.example.trySpringBoot;
 
 import org.hibernate.annotations.ValueGenerationType;
+import org.springframework.core.annotation.Order;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="T_STUDENT")
+@Table(name = "T_STUDENT")
 public class Student {
+
 	@Id
 	@GeneratedValue
 	private int id;
+
 	@Column(name = "c-fname", length = 20)
 	private String firstname;
 	private String lastname;
+
+	@Column(unique = true)
 	private String email;
 	private int age;
 
+	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+	private StudentProfile studentProfile;
+
+	@ManyToOne
+	@JoinColumn (name = "school_id")
+	private School school;
+
+	// Constructors
 	public Student(String firstname, String lastname, String email, int age) {
 		super();
 		this.firstname = firstname;
@@ -30,7 +48,8 @@ public class Student {
 
 	public Student() {
 	}
-
+	
+	// Getters & Setters 
 	public int getId() {
 		return id;
 	}
@@ -70,4 +89,22 @@ public class Student {
 	public void setAge(int age) {
 		this.age = age;
 	}
+
+	public StudentProfile getStudentProfile() {
+		return studentProfile;
+	}
+
+	public void setStudentProfile(StudentProfile studentProfile) {
+		this.studentProfile = studentProfile;
+	}
+
+	public School getSchool() {
+		return school;
+	}
+
+	public void setSchool(School school) {
+		this.school = school;
+	}
+	
+	
 }
